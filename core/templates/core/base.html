@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Lost & Found | Lead City University{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS v4 Browser Build -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    
+    <style>
+        :root {
+            --lcu-blue: #003366;
+            --lcu-pink: #FF007F;
+            --lcu-white: #FFFFFF;
+            --lcu-light-gray: #F8FAFC;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .lcu-gradient-text {
+            background: linear-gradient(135deg, var(--lcu-blue) 0%, var(--lcu-pink) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            box-decoration-break: clone;
+            -webkit-box-decoration-break: clone;
+            padding-bottom: 0.1em;
+        }
+
+        .lcu-btn-primary {
+            background: var(--lcu-blue);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lcu-btn-primary:hover {
+            background: #002244;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 51, 102, 0.2);
+        }
+
+        .lcu-btn-pink {
+            background: var(--lcu-pink);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lcu-btn-pink:hover {
+            background: #E60073;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.2);
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 51, 102, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .img-enhance {
+            filter: brightness(1.05) contrast(1.1) saturate(1.1);
+        }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-[#1E293B] antialiased min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="glass-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-3 group">
+                        {% load static %}
+                        <div class="relative w-12 h-12 flex items-center justify-center transition-transform group-hover:scale-110">
+                            <img src="{% static 'core/logo.png' %}" alt="LCU Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <!-- Fallback if logo.png is missing -->
+                            <div class="hidden w-10 h-10 bg-[#003366] rounded-xl items-center justify-center shadow-lg">
+                                <span class="text-white font-bold text-xl">L</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-xl font-extrabold tracking-tight text-[#003366] leading-none">Campus L&F</span>
+                            <span class="text-[10px] font-semibold uppercase tracking-widest text-[#FF007F]">Lead City University</span>
+                        </div>
+                    </a>
+                    
+                    {% if user.is_authenticated %}
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-[#64748B] hover:text-[#003366] transition-colors flex items-center space-x-1">
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="{% url 'browse' %}" class="text-sm font-semibold text-[#64748B] hover:text-[#003366] transition-colors flex items-center space-x-1">
+                            <span>Browse Items</span>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    {% if user.is_authenticated %}
+                        <div class="hidden sm:flex items-center space-x-6">
+                            <!-- Notification Bell -->
+                            <a href="{% url 'notifications' %}" class="relative p-2 text-slate-400 hover:text-[#003366] transition-colors group">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+                                {% if unread_notifications_count > 0 %}
+                                    <span class="absolute top-2 right-2 block h-2.5 w-2.5 rounded-full bg-[#FF007F] ring-2 ring-white animate-pulse"></span>
+                                {% endif %}
+                            </a>
+
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center border border-blue-200">
+                                    <span class="text-xs font-bold text-[#003366]">{{ user.full_name|slice:":1" }}</span>
+                                </div>
+                                <span class="text-sm font-medium text-[#334155]">{{ user.full_name }}</span>
+                            </div>
+                        </div>
+                        <a href="{% url 'logout' %}" class="text-sm font-semibold text-[#64748B] hover:text-[#003366] transition-colors">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-sm font-semibold text-[#64748B] hover:text-[#003366] transition-colors">Login</a>
+                        <a href="{% url 'register' %}" class="lcu-btn-primary px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-md">
+                            Get Started
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% if messages %}
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+                {% for message in messages %}
+                    <div class="p-4 rounded-2xl flex items-center space-x-3 animate-fade-in-up {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-100{% else %}bg-green-50 text-green-700 border border-green-100{% endif %}">
+                        <div class="shrink-0">
+                            {% if message.tags == 'error' %}
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                            {% else %}
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                            {% endif %}
+                        </div>
+                        <p class="text-sm font-medium">{{ message }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="animate-fade-in-up">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="space-y-4">
+                    <a href="#" class="flex items-center space-x-2">
+                        <div class="relative w-10 h-10 flex items-center justify-center">
+                            <img src="{% static 'core/logo.png' %}" alt="LCU Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="hidden w-8 h-8 bg-[#003366] rounded-lg items-center justify-center">
+                                <span class="text-white font-bold text-lg">L</span>
+                            </div>
+                        </div>
+                        <span class="text-lg font-bold text-[#003366]">Campus L&F</span>
+                    </a>
+                    <p class="text-sm text-slate-500 leading-relaxed max-w-xs">
+                        The official Lost and Found system for Lead City University. Helping students and staff reconnect with their belongings.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-[#003366] mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'home' %}" class="text-sm text-slate-500 hover:text-[#FF007F] transition-colors">Home</a></li>
+                        <li><a href="{% url 'browse' %}" class="text-sm text-slate-500 hover:text-[#FF007F] transition-colors">Browse Items</a></li>
+                        <li><a href="#" class="text-sm text-slate-500 hover:text-[#FF007F] transition-colors">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-[#003366] mb-4">Contact</h4>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li>Toll Gate Area, Ibadan</li>
+                        <li>Oyo State, Nigeria</li>
+                        <li>info@lcu.edu.ng</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-slate-50 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <p class="text-xs font-medium text-slate-400">&copy; {% now "Y" %} Lead City University. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <span class="text-xs font-bold text-[#FF007F] uppercase tracking-widest">Knowledge for Self-reliance</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Global Local Time Converter
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.local-time').forEach(el => {
+                const date = new Date(el.dataset.timestamp);
+                if (!isNaN(date)) {
+                    el.innerText = date.toLocaleString([], { 
+                        month: 'short', 
+                        day: '2-digit', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

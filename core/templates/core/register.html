@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Create Account | Campus Lost & Found{% endblock %}
+
+{% block content %}
+<div class="min-h-[90vh] flex items-center justify-center px-4 py-12">
+    <div class="max-w-md w-full">
+        <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-100 overflow-hidden">
+            <div class="p-10">
+                <div class="text-center mb-10">
+                    {% load static %}
+                    <div class="w-20 h-20 mx-auto mb-6 transition-transform hover:scale-105">
+                        <img src="{% static 'core/logo.png' %}" alt="LCU Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="hidden w-16 h-16 bg-[#FF007F] rounded-[1.5rem] items-center justify-center mx-auto shadow-lg shadow-pink-500/20">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-[#003366]">Join Campus L&F</h2>
+                    <p class="text-sm text-slate-400 font-medium mt-1">Start reconnecting with your belongings</p>
+                </div>
+
+                <form method="POST" action="{% url 'register' %}" onsubmit="return handleRegisterSubmit(this)" class="space-y-6">
+                    {% csrf_token %}
+                    <div class="space-y-5">
+                        {% for field in form %}
+                            <div class="animate-fade-in-up" style="animation-delay: {{ forloop.counter0|add:1 }}00ms">
+                                <label for="{{ field.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 ml-1">
+                                    {{ field.label }} {% if field.field.required %}<span class="text-[#FF007F]">*</span>{% endif %}
+                                </label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="mt-2 flex items-center space-x-1 text-red-500">
+                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                        <p class="text-[10px] font-bold uppercase tracking-tight">{{ field.errors.0 }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="w-full lcu-btn-primary py-4 rounded-2xl text-white font-bold text-sm shadow-xl shadow-blue-900/10 hover:shadow-2xl transition-all flex items-center justify-center">
+                        Create Official Account
+                    </button>
+                </form>
+            </div>
+
+            <script>
+                function handleRegisterSubmit(form) {
+                    const btn = form.querySelector('button[type="submit"]');
+                    btn.innerHTML = '<div class="flex items-center space-x-2"><div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div><span>Creating Account...</span></div>';
+                    btn.classList.add('opacity-80', 'cursor-not-allowed');
+                    return true;
+                }
+
+                document.querySelectorAll('input[type="password"]').forEach(input => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'relative group';
+                    input.parentNode.insertBefore(wrapper, input);
+                    wrapper.appendChild(input);
+                    
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#003366] transition-colors';
+                    btn.innerHTML = `
+                        <svg class="w-5 h-5 eye-open" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        <svg class="w-5 h-5 eye-closed hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057-5.064-7-9.542-7 1.274 4.057 5.064 7 9.542 7 4.477 0 8.268-2.943 9.542-7zM3 3l18 18"/></svg>
+                    `;
+                    
+                    btn.onclick = () => {
+                        const isOpen = input.type === 'password';
+                        input.type = isOpen ? 'text' : 'password';
+                        btn.querySelector('.eye-open').classList.toggle('hidden', isOpen);
+                        btn.querySelector('.eye-closed').classList.toggle('hidden', !isOpen);
+                    };
+                    
+                    wrapper.appendChild(btn);
+                });
+            </script>
+            
+            <div class="bg-slate-50 p-6 text-center border-t border-slate-100">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    Already registered? <a href="{% url 'login' %}" class="text-[#FF007F] hover:underline">Sign In</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <p class="text-[10px] font-bold text-slate-300 uppercase tracking-[0.2em]">Knowledge for Self-reliance</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

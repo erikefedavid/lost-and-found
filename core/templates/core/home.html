@@ -1,0 +1,123 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Welcome | Campus Lost & Found{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="relative overflow-hidden bg-white pt-16 pb-32">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+            <div class="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
+                <h1>
+                    <span class="block text-sm font-semibold uppercase tracking-wide text-[#FF007F] animate-fade-in-up">
+                        Official LCU Recovery
+                    </span>
+                    <span class="mt-1 block text-4xl tracking-tight font-extrabold sm:text-5xl xl:text-6xl leading-tight">
+                        <span class="text-[#003366]">Reconnect with</span>
+                        <span class="lcu-gradient-text">your belongings.</span>
+                    </span>
+                </h1>
+                <p class="mt-3 text-base text-slate-500 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                    Lead City University's centralized digital hub for lost and found items. Fast, secure, and built for our campus community.
+                </p>
+                <div class="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'report_lost' %}" class="lcu-btn-primary px-8 py-4 rounded-2xl text-white font-bold text-center shadow-xl shadow-blue-900/10 flex items-center justify-center space-x-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/></svg>
+                                <span>Report Lost</span>
+                            </a>
+                            <a href="{% url 'report_found' %}" class="lcu-btn-pink px-8 py-4 rounded-2xl text-white font-bold text-center shadow-xl shadow-pink-500/10 flex items-center justify-center space-x-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>Report Found</span>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'register' %}" class="lcu-btn-primary px-10 py-4 rounded-2xl text-white font-bold text-center shadow-xl shadow-blue-900/10">
+                                Join Now
+                            </a>
+                            <a href="{% url 'browse' %}" class="bg-white border border-slate-200 px-10 py-4 rounded-2xl text-[#003366] font-bold text-center hover:bg-slate-50 transition-colors">
+                                Browse Items
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
+                <div class="relative mx-auto w-full rounded-3xl shadow-2xl overflow-hidden bg-slate-100 group">
+                    <div class="relative mx-auto w-full rounded-3xl shadow-2xl overflow-hidden bg-slate-100 group">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-[#003366]/20 to-[#FF007F]/10 z-10"></div>
+                        <img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 bg-slate-200" 
+                             src="{% static 'core/hero.png' %}" 
+                             alt="LCU Campus"
+                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200';">
+                        
+                        <!-- Fallback SVG in case image is missing -->
+                        <div class="hidden w-full aspect-[4/3] bg-gradient-to-br from-[#003366] to-[#001A33] items-center justify-center relative overflow-hidden">
+                            <div class="relative z-10 text-center p-8">
+                                <div class="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20">
+                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                </div>
+                                <h3 class="text-white font-bold text-xl">Campus L&F</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-6 left-6 z-20">
+                        <div class="bg-white/90 backdrop-blur px-4 py-2 rounded-xl border border-white/50">
+                            <span class="text-xs font-bold text-[#003366]">Official Campus Tool</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="bg-[#F8FAFC] py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-base font-bold text-[#FF007F] tracking-wide uppercase">Why Use L&F?</h2>
+            <p class="mt-2 text-3xl font-extrabold text-[#003366] sm:text-4xl">
+                The smarter way to find your items.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+                <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#003366] transition-colors">
+                    <svg class="w-8 h-8 text-[#003366] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-[#003366] mb-3">Instant Notifications</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                    Get alerted immediately when an item matching your description is found on campus.
+                </p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+                <div class="w-14 h-14 bg-pink-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#FF007F] transition-colors">
+                    <svg class="w-8 h-8 text-[#FF007F] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-[#003366] mb-3">Verified Users</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                    A secure environment limited to Lead City University staff and students.
+                </p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+                <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-slate-900 transition-colors">
+                    <svg class="w-8 h-8 text-slate-900 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-[#003366] mb-3">Easy Tracking</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                    Track all your reported items and their recovery status in one central dashboard.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,56 @@
+{% extends 'core/base.html' %}
+
+{% block title %}{{ title }} | Campus Lost & Found{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-100 overflow-hidden">
+        <div class="p-8 sm:p-12">
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-2 h-8 {% if 'Lost' in title %}bg-[#003366]{% else %}bg-[#FF007F]{% endif %} rounded-full"></div>
+                <div>
+                    <h2 class="text-3xl font-extrabold text-[#003366] tracking-tight">{{ title }}</h2>
+                    <p class="text-sm text-slate-400 font-medium">Be as descriptive as possible to ensure a successful recovery.</p>
+                </div>
+            </div>
+            
+            <form method="POST" enctype="multipart/form-data" class="space-y-8">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 gap-y-6">
+                    {% for field in form %}
+                        <div class="animate-fade-in-up" style="animation-delay: {{ forloop.counter0|add:1 }}00ms">
+                            <label for="{{ field.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 ml-1">
+                                {{ field.label }} {% if field.field.required %}<span class="text-[#FF007F]">*</span>{% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="mt-2 flex items-center space-x-1 text-red-500">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                                    <p class="text-[10px] font-bold uppercase tracking-tight">{{ field.errors.0 }}</p>
+                                </div>
+                            {% endif %}
+                            {% if field.help_text %}
+                                <p class="text-[10px] text-slate-300 font-medium mt-2 ml-1 italic">{{ field.help_text }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="pt-8 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-end space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="{% url 'dashboard' %}" class="w-full sm:w-auto text-center text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest px-8 py-4">
+                        Discard
+                    </a>
+                    <button type="submit" class="w-full sm:w-auto lcu-btn-pink px-10 py-4 rounded-2xl text-white font-bold text-sm shadow-xl shadow-pink-900/10 transition-all">
+                        Submit Official Report
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="mt-8 text-center">
+        <p class="text-[10px] font-bold text-slate-300 uppercase tracking-[0.2em]">Lead City University Security Department</p>
+    </div>
+</div>
+{% endblock %}
+

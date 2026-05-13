@@ -1,0 +1,89 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Sign In | Campus Lost & Found{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center px-4 py-12">
+    <div class="max-w-md w-full">
+        <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 border border-slate-100 overflow-hidden">
+            <div class="p-10">
+                <div class="text-center mb-10">
+                    {% load static %}
+                    <div class="w-20 h-20 mx-auto mb-6 transition-transform hover:scale-105">
+                        <img src="{% static 'core/logo.png' %}" alt="LCU Logo" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="hidden w-16 h-16 bg-[#003366] rounded-[1.5rem] items-center justify-center mx-auto shadow-lg">
+                            <span class="text-white font-black text-2xl">L</span>
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-[#003366]">Welcome Back</h2>
+                    <p class="text-sm text-slate-400 font-medium mt-1">Sign in to manage your campus reports</p>
+                </div>
+
+                <form method="POST" action="{% url 'login' %}" onsubmit="return handleFormSubmit(this)" class="space-y-6">
+                    {% csrf_token %}
+                    <div>
+                        <label for="{{ form.username.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Email Address</label>
+                        <div class="relative">
+                            <input type="email" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" class="w-full pl-4 pr-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-[#003366]/10 focus:bg-white placeholder:text-slate-300 transition-all outline-none" placeholder="e.g. name@lcu.edu.ng" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <label for="{{ form.password.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-slate-400">Password</label>
+                            <a href="#" class="text-[10px] font-bold text-[#FF007F] uppercase tracking-widest hover:underline">Forgot?</a>
+                        </div>
+                        <div class="relative group">
+                            <input type="password" name="{{ form.password.name }}" id="password_input" class="w-full pl-4 pr-12 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-[#003366]/10 focus:bg-white placeholder:text-slate-300 transition-all outline-none" placeholder="Enter your password" required>
+                            <button type="button" onclick="togglePassword('password_input', this)" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#003366] transition-colors">
+                                <svg id="eye_open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                <svg id="eye_closed" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057-5.064-7-9.542-7 1.274 4.057 5.064 7 9.542 7 4.477 0 8.268-2.943 9.542-7zM3 3l18 18"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <script>
+                        function togglePassword(inputId, btn) {
+                            const input = document.getElementById(inputId);
+                            const eyeOpen = btn.querySelector('#eye_open');
+                            const eyeClosed = btn.querySelector('#eye_closed');
+                            
+                            if (input.type === 'password') {
+                                input.type = 'text';
+                                eyeOpen.classList.add('hidden');
+                                eyeClosed.classList.remove('hidden');
+                            } else {
+                                input.type = 'password';
+                                eyeOpen.classList.remove('hidden');
+                                eyeClosed.classList.add('hidden');
+                            }
+                        }
+
+                        function handleFormSubmit(form) {
+                            const btn = form.querySelector('button[type="submit"]');
+                            btn.innerHTML = '<div class="flex items-center space-x-2"><div class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div><span>Verifying...</span></div>';
+                            btn.classList.add('opacity-80', 'cursor-not-allowed');
+                            return true;
+                        }
+                    </script>
+
+                    <button type="submit" class="w-full lcu-btn-primary py-4 rounded-2xl text-white font-bold text-sm shadow-xl shadow-blue-900/10 hover:shadow-2xl transition-all flex items-center justify-center">
+                        Sign In to Hub
+                    </button>
+                </form>
+            </div>
+            
+            <div class="bg-slate-50 p-6 text-center border-t border-slate-100">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    New to the system? <a href="{% url 'register' %}" class="text-[#FF007F] hover:underline">Create Account</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <p class="text-[10px] font-bold text-slate-300 uppercase tracking-[0.2em]">Knowledge for Self-reliance</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
