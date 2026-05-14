@@ -170,11 +170,16 @@ def item_detail(request, item_type, item_id):
             else:
                 form = ClaimForm()
             
+        claims = None
+        if item.user == request.user:
+            claims = Claim.objects.filter(found_item=item).order_by('-created_at')
+            
         context = {
             'item': item,
             'item_type': item_type,
             'form': form,
-            'existing_claim': existing_claim
+            'existing_claim': existing_claim,
+            'claims': claims
         }
     else:
         item = get_object_or_404(LostItem, id=item_id)

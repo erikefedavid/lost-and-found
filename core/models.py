@@ -77,10 +77,18 @@ class User(AbstractUser):
         return self.email
 
 class LostItem(models.Model):
+    CATEGORY_CHOICES = (
+        ('Electronics', 'Electronics (Phones, Laptops, etc.)'),
+        ('Documents', 'Documents (ID Cards, Notes, etc.)'),
+        ('Accessories', 'Accessories (Keys, Wallets, Bags)'),
+        ('Clothing', 'Clothing & Apparel'),
+        ('Books', 'Books & Stationery'),
+        ('Others', 'Others'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lost_items')
     item_name = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.CharField(max_length=100)
+    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
     location = models.CharField(max_length=200)
     date_lost = models.DateField()
     image = models.ImageField(upload_to='lost_items/', blank=True, null=True)
@@ -103,7 +111,7 @@ class FoundItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='found_items')
     item_name = models.CharField(max_length=200)
     description = models.TextField()
-    category = models.CharField(max_length=100)
+    category = models.CharField(max_length=100, choices=LostItem.CATEGORY_CHOICES)
     location = models.CharField(max_length=200)
     date_found = models.DateField()
     image = models.ImageField(upload_to='found_items/', blank=True, null=True)
@@ -133,9 +141,9 @@ class FoundItem(models.Model):
             found_keywords = set([w for w in raw_words if (w not in stop_words and len(w) > 2) or w in important_short_words])
             
             if found_keywords:
-                # Find lost items in the same category, reported before or on the day this was found
+                # Find lost items in the same category (case-insensitive), reported before or on the day this was found
                 potential_matches = LostItem.objects.filter(
-                    category=self.category,
+                    category__iexact=self.category,
                     date_lost__lte=self.date_found
                 )
                 

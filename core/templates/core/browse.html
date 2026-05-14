@@ -29,6 +29,7 @@
                 <button type="submit" name="category" value="Clothing" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all whitespace-nowrap {% if category == 'Clothing' %}bg-[#003366] text-white shadow-lg{% else %}bg-slate-50 text-slate-400 hover:bg-slate-100{% endif %}">Clothing</button>
                 <button type="submit" name="category" value="Documents" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all whitespace-nowrap {% if category == 'Documents' %}bg-[#003366] text-white shadow-lg{% else %}bg-slate-50 text-slate-400 hover:bg-slate-100{% endif %}">Documents</button>
                 <button type="submit" name="category" value="Accessories" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all whitespace-nowrap {% if category == 'Accessories' %}bg-[#003366] text-white shadow-lg{% else %}bg-slate-50 text-slate-400 hover:bg-slate-100{% endif %}">Accessories</button>
+                <button type="submit" name="category" value="Books" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all whitespace-nowrap {% if category == 'Books' %}bg-[#003366] text-white shadow-lg{% else %}bg-slate-50 text-slate-400 hover:bg-slate-100{% endif %}">Books</button>
                 <button type="submit" name="category" value="Others" class="px-5 py-2.5 rounded-full text-xs font-bold transition-all whitespace-nowrap {% if category == 'Others' %}bg-[#003366] text-white shadow-lg{% else %}bg-slate-50 text-slate-400 hover:bg-slate-100{% endif %}">Others</button>
             </div>
             
@@ -80,6 +81,7 @@
                             <option value="Clothing" {% if category == 'Clothing' %}selected{% endif %}>Clothing</option>
                             <option value="Documents" {% if category == 'Documents' %}selected{% endif %}>Documents</option>
                             <option value="Accessories" {% if category == 'Accessories' %}selected{% endif %}>Accessories</option>
+                            <option value="Books" {% if category == 'Books' %}selected{% endif %}>Books & Stationery</option>
                             <option value="Others" {% if category == 'Others' %}selected{% endif %}>Others</option>
                         </select>
                     </div>

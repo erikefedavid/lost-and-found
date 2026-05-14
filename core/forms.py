@@ -35,14 +35,14 @@ class UserRegistrationForm(forms.ModelForm):
         return user
 
 class LostItemForm(forms.ModelForm):
-    item_name = forms.CharField(validators=[MinLengthValidator(4)], widget=forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'What did you lose?'}))
+    item_name = forms.CharField(validators=[MinLengthValidator(2)], widget=forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'What did you lose?'}))
     description = forms.CharField(validators=[MinLengthValidator(10)], widget=forms.Textarea(attrs={'class': INPUT_CLASSES, 'rows': 4, 'placeholder': 'Provide details (color, brand, serial number...)'}))
     
     class Meta:
         model = LostItem
         fields = ['item_name', 'description', 'category', 'location', 'date_lost', 'image']
         widgets = {
-            'category': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'e.g. Electronics, Clothing'}),
+            'category': forms.Select(attrs={'class': INPUT_CLASSES}),
             'location': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'Where was it last seen?'}),
             'date_lost': forms.DateInput(attrs={'class': INPUT_CLASSES, 'type': 'date'}),
             'image': forms.FileInput(attrs={'class': 'w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#003366] file:text-white hover:file:bg-[#002244]'}),
@@ -52,14 +52,14 @@ class LostItemForm(forms.ModelForm):
         }
 
 class FoundItemForm(forms.ModelForm):
-    item_name = forms.CharField(validators=[MinLengthValidator(4)], widget=forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'What did you find?'}))
+    item_name = forms.CharField(validators=[MinLengthValidator(2)], widget=forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'What did you find?'}))
     description = forms.CharField(validators=[MinLengthValidator(10)], widget=forms.Textarea(attrs={'class': INPUT_CLASSES, 'rows': 4, 'placeholder': 'Describe the item (be careful not to give away secrets)'}))
 
     class Meta:
         model = FoundItem
         fields = ['item_name', 'description', 'category', 'location', 'date_found', 'image']
         widgets = {
-            'category': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'e.g. Accessories, Documents'}),
+            'category': forms.Select(attrs={'class': INPUT_CLASSES}),
             'location': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'Where did you find it?'}),
             'date_found': forms.DateInput(attrs={'class': INPUT_CLASSES, 'type': 'date'}),
             'image': forms.FileInput(attrs={'class': 'w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#003366] file:text-white hover:file:bg-[#002244]'}),
