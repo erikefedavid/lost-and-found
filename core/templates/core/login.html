@@ -31,7 +31,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <label for="{{ form.password.id_for_label }}" class="block text-xs font-bold uppercase tracking-wider text-slate-400">Password</label>
-                            <a href="#" class="text-[10px] font-bold text-[#FF007F] uppercase tracking-widest hover:underline">Forgot?</a>
+                            <a href="{% url 'password_reset' %}" class="text-[10px] font-bold text-[#FF007F] uppercase tracking-widest hover:underline">Forgot?</a>
                         </div>
                         <div class="relative group">
                             <input type="password" name="{{ form.password.name }}" id="password_input" class="w-full pl-4 pr-12 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:ring-2 focus:ring-[#003366]/10 focus:bg-white placeholder:text-slate-300 transition-all outline-none" placeholder="Enter your password" required>

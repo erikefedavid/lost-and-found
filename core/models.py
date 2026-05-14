@@ -8,6 +8,8 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+import re
+import django.utils.crypto as crypto
 
 def compress_image(image_field):
     if not image_field:
@@ -119,35 +121,35 @@ class FoundItem(models.Model):
         if is_new:
             # The Auto-Match Brain
             from .models import LostItem, Notification
-            import re
             
             # Common words to ignore so we don't get false positives
-            stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'my', 'lost', 'found', 'missing', 'black', 'white', 'blue', 'red'}
+            stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'my', 'lost', 'found', 'missing', 'black', 'white', 'blue', 'red', 'is', 'was', 'with'}
             
             # Extract meaningful keywords from the found item's name
             raw_words = re.findall(r'\b\w+\b', self.item_name.lower())
-            found_keywords = set([w for w in raw_words if w not in stop_words and len(w) > 2])
             
-            if not found_keywords:
-                return # If no good keywords, don't try to match (prevents spam)
-
-            # Find lost items in the same category, reported before or on the day this was found
-            potential_matches = LostItem.objects.filter(
-                category=self.category,
-                date_lost__lte=self.date_found
-            )
+            # Special case: include short but important campus words like 'ID', 'PC', 'CV'
+            important_short_words = {'id', 'pc', 'cv', 'ks'}
+            found_keywords = set([w for w in raw_words if (w not in stop_words and len(w) > 2) or w in important_short_words])
             
-            for lost_item in potential_matches:
-                lost_words = re.findall(r'\b\w+\b', lost_item.item_name.lower())
-                lost_keywords = set([w for w in lost_words if w not in stop_words and len(w) > 2])
+            if found_keywords:
+                # Find lost items in the same category, reported before or on the day this was found
+                potential_matches = LostItem.objects.filter(
+                    category=self.category,
+                    date_lost__lte=self.date_found
+                )
                 
-                # If there's an intersection in the important keywords, we have a match!
-                if found_keywords.intersection(lost_keywords):
-                    Notification.objects.create(
-                        user=lost_item.user,
-                        title="Potential Match Found! 🔍",
-                        message=f"System Alert: Someone just reported a found item ('{self.item_name}') that might match the '{lost_item.item_name}' you lost. Please check the Browse page!"
-                    )
+                for lost_item in potential_matches:
+                    lost_words = re.findall(r'\b\w+\b', lost_item.item_name.lower())
+                    lost_keywords = set([w for w in lost_words if (w not in stop_words and len(w) > 2) or w in important_short_words])
+                    
+                    # If there's an intersection in the important keywords, we have a match!
+                    if found_keywords.intersection(lost_keywords):
+                        Notification.objects.create(
+                            user=lost_item.user,
+                            title="Potential Match Found! 🔍",
+                            message=f"System Alert: Someone just reported a found item ('{self.item_name}') that might match the '{lost_item.item_name}' you lost. Please check the Browse page!"
+                        )
 
     def __str__(self):
         return self.item_name
@@ -173,7 +175,6 @@ class Claim(models.Model):
 
         # Generate token if approved
         if self.status == 'approved' and not self.claim_token:
-            import django.utils.crypto as crypto
             self.claim_token = f"LCU-{crypto.get_random_string(length=6).upper()}"
 
         # If the claim is approved, mark the item as claimed

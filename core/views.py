@@ -48,9 +48,21 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
-    lost_items = LostItem.objects.all().order_by('-created_at')[:5]
-    found_items = FoundItem.objects.filter(status='unclaimed').order_by('-created_at')[:5]
-    return render(request, 'core/dashboard.html', {'lost_items': lost_items, 'found_items': found_items})
+    # Filter to show only items belonging to the current user
+    lost_items = LostItem.objects.filter(user=request.user).order_by('-created_at')
+    found_items = FoundItem.objects.filter(user=request.user).order_by('-created_at')
+    
+    # Calculate real statistics
+    recovered_count = Claim.objects.filter(user=request.user, status='approved').count()
+    
+    context = {
+        'lost_items': lost_items[:5],
+        'found_items': found_items[:5],
+        'lost_count': lost_items.count(),
+        'found_count': found_items.count(),
+        'recovered_count': recovered_count,
+    }
+    return render(request, 'core/dashboard.html', context)
 
 @login_required
 def report_lost(request):
@@ -144,7 +156,8 @@ def item_detail(request, item_type, item_id):
             existing_claim = Claim.objects.filter(found_item=item, user=request.user).first()
         
         form = None
-        if request.user.is_authenticated and not existing_claim:
+        # Only allow claiming if the item is still unclaimed
+        if request.user.is_authenticated and not existing_claim and item.status == 'unclaimed':
             if request.method == 'POST':
                 form = ClaimForm(request.POST, request.FILES)
                 if form.is_valid():

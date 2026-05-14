@@ -76,6 +76,23 @@
         .img-enhance {
             filter: brightness(1.05) contrast(1.1) saturate(1.1);
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F8FAFC;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 20px;
+            border: 2px solid #F8FAFC;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #003366;
+        }
     </style>
 </head>
 <body class="bg-[#F8FAFC] text-[#1E293B] antialiased min-h-screen flex flex-col">
