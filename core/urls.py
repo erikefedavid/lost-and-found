@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from django.http import HttpResponse
 from . import views
 
 urlpatterns = [
@@ -13,6 +14,7 @@ urlpatterns = [
     path('browse/', views.browse, name='browse'),
     path('item/<str:item_type>/<int:item_id>/', views.item_detail, name='item_detail'),
     path('notifications/', views.notifications, name='notifications'),
+    path('ping/', lambda r: HttpResponse("pong"), name='ping'),
     path('profile/', views.profile, name='profile'),
     
     # Password Reset
