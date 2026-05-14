@@ -12,4 +12,5 @@ urlpatterns = [
     path('browse/', views.browse, name='browse'),
     path('item/<str:item_type>/<int:item_id>/', views.item_detail, name='item_detail'),
     path('notifications/', views.notifications, name='notifications'),
+    path('profile/', views.profile, name='profile'),
 ]

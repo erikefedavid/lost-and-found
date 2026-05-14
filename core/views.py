@@ -7,7 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .forms import UserRegistrationForm, LostItemForm, FoundItemForm, ClaimForm
+from .forms import UserRegistrationForm, LostItemForm, FoundItemForm, ClaimForm, UserProfileForm
 from .models import LostItem, FoundItem, Claim
 
 def home(request):
@@ -178,3 +178,15 @@ def notifications(request):
     # Mark all as read when viewing the page
     notifications.update(is_read=True)
     return render(request, 'core/notifications.html', {'notifications': notifications})
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile updated successfully!')
+            return redirect('profile')
+    else:
+        form = UserProfileForm(instance=request.user)
+    return render(request, 'core/profile.html', {'form': form})

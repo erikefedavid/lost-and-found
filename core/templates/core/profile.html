@@ -1,0 +1,68 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My Profile | Campus Recovery Hub{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
+        <div class="relative h-32 bg-[#003366]">
+            <div class="absolute -bottom-12 left-10">
+                <div class="w-24 h-24 bg-white rounded-3xl shadow-lg flex items-center justify-center border-4 border-white">
+                    <span class="text-3xl font-black text-[#003366]">{{ user.full_name|slice:":1" }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pt-16 pb-10 px-10">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-black text-[#003366] tracking-tight">Account Settings</h1>
+                    <p class="text-slate-400 font-medium text-sm mt-1">Manage your campus identity and contact info.</p>
+                </div>
+                <div class="px-4 py-2 bg-blue-50 rounded-xl text-[#003366] text-[10px] font-black uppercase tracking-widest">
+                    {{ user.role }} Account
+                </div>
+            </div>
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Full Legal Name</label>
+                    {{ form.full_name }}
+                    {% if form.full_name.errors %}
+                        <p class="text-red-500 text-[10px] mt-1 font-bold">{{ form.full_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Campus ID Number</label>
+                    {{ form.campus_id }}
+                    {% if form.campus_id.errors %}
+                        <p class="text-red-500 text-[10px] mt-1 font-bold">{{ form.campus_id.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-[#003366] py-4 rounded-2xl text-white text-sm font-black shadow-xl shadow-blue-900/20 hover:bg-[#002244] transition-all flex items-center justify-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <span>Save Profile Changes</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-10 pt-10 border-t border-slate-50">
+                <div class="bg-slate-50 p-6 rounded-3xl flex items-center justify-between">
+                    <div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Linked Email</p>
+                        <p class="text-sm font-bold text-[#003366]">{{ user.email }}</p>
+                    </div>
+                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                        <svg class="w-5 h-5 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

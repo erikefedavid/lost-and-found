@@ -75,3 +75,12 @@ class ClaimForm(forms.ModelForm):
         model = Claim
         fields = ['justification']
 
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['full_name', 'campus_id']
+        widgets = {
+            'full_name': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'Enter your full name'}),
+            'campus_id': forms.TextInput(attrs={'class': INPUT_CLASSES, 'placeholder': 'e.g. LCU/2023/...'}),
+        }
+

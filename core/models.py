@@ -4,6 +4,33 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 # pyrefly: ignore [missing-import]
 from django.utils.translation import gettext_lazy as _
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
+
+def compress_image(image_field):
+    if not image_field:
+        return image_field
+    
+    try:
+        img = Image.open(image_field)
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+            
+        img.thumbnail((800, 800), Image.Resampling.LANCZOS)
+        
+        output = BytesIO()
+        img.save(output, format='JPEG', quality=70)
+        output.seek(0)
+        
+        filename = image_field.name.split('.')[0] + '.jpg'
+        
+        return InMemoryUploadedFile(
+            output, 'ImageField', filename, 'image/jpeg', sys.getsizeof(output), None
+        )
+    except Exception as e:
+        return image_field # Return original if something goes wrong
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -57,6 +84,12 @@ class LostItem(models.Model):
     image = models.ImageField(upload_to='lost_items/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        from django.core.files.uploadedfile import UploadedFile
+        if self.image and isinstance(self.image.file, UploadedFile):
+            self.image = compress_image(self.image)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.item_name
 
@@ -76,6 +109,10 @@ class FoundItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
+        from django.core.files.uploadedfile import UploadedFile
+        if self.image and isinstance(self.image.file, UploadedFile):
+            self.image = compress_image(self.image)
+            
         is_new = self.pk is None
         super().save(*args, **kwargs)
         
@@ -192,6 +229,29 @@ class Notification(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        
+        if is_new:
+            # Trigger real email notification
+            from django.core.mail import send_mail
+            from django.conf import settings
+            
+            try:
+                subject = f"🔔 {self.title}"
+                message = f"Hello {self.user.full_name},\n\nYou have a new notification on the Campus Recovery Hub:\n\n{self.message}\n\nCheck your dashboard for more details.\n\nBest regards,\nCampus Recovery Team"
+                
+                send_mail(
+                    subject,
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [self.user.email],
+                    fail_silently=True,
+                )
+            except Exception as e:
+                pass # Don't crash if email fails
 
     def __str__(self):
         return f"Notification for {self.user.email}: {self.title}"

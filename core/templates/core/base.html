@@ -111,7 +111,16 @@
                     {% endif %}
                 </div>
 
-                <div class="flex items-center space-x-6">
+                <!-- Mobile menu button -->
+                <div class="flex items-center sm:hidden">
+                    <button type="button" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="inline-flex items-center justify-center p-2 rounded-xl text-slate-400 hover:text-[#003366] hover:bg-slate-100 transition-all">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="hidden sm:flex sm:items-center sm:space-x-6">
                     {% if user.is_authenticated %}
                         <div class="hidden sm:flex items-center space-x-6">
                             <!-- Notification Bell -->
@@ -122,14 +131,14 @@
                                 {% endif %}
                             </a>
 
-                            <div class="flex items-center space-x-3">
+                            <a href="{% url 'profile' %}" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
                                 <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center border border-blue-200">
                                     <span class="text-xs font-bold text-[#003366]">{{ user.full_name|slice:":1" }}</span>
                                 </div>
                                 <span class="text-sm font-medium text-[#334155]">{{ user.full_name }}</span>
-                            </div>
+                            </a>
+                            <a href="{% url 'logout' %}" class="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-[#FF007F] transition-colors">Logout</a>
                         </div>
-                        <a href="{% url 'logout' %}" class="text-sm font-semibold text-[#64748B] hover:text-[#003366] transition-colors">Logout</a>
                     {% else %}
                         <a href="{% url 'login' %}" class="text-sm font-semibold text-[#64748B] hover:text-[#003366] transition-colors">Login</a>
                         <a href="{% url 'register' %}" class="lcu-btn-primary px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-md">
@@ -140,6 +149,29 @@
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden sm:hidden bg-white border-b border-slate-100 animate-fade-in-up">
+        <div class="px-4 pt-2 pb-6 space-y-2">
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="block px-4 py-3 rounded-xl text-base font-bold text-[#003366] hover:bg-slate-50">Dashboard</a>
+                <a href="{% url 'browse' %}" class="block px-4 py-3 rounded-xl text-base font-bold text-[#003366] hover:bg-slate-50">Browse Items</a>
+                <a href="{% url 'profile' %}" class="block px-4 py-3 rounded-xl text-base font-bold text-[#003366] hover:bg-slate-50">My Profile</a>
+                <a href="{% url 'notifications' %}" class="block px-4 py-3 rounded-xl text-base font-bold text-[#003366] hover:bg-slate-50 flex items-center justify-between">
+                    <span>Notifications</span>
+                    {% if unread_notifications_count > 0 %}
+                        <span class="px-2 py-0.5 bg-[#FF007F] text-white text-[10px] font-black rounded-full">{{ unread_notifications_count }}</span>
+                    {% endif %}
+                </a>
+                <div class="border-t border-slate-50 mt-4 pt-4">
+                    <a href="{% url 'logout' %}" class="block px-4 py-3 rounded-xl text-base font-bold text-slate-400 hover:text-red-500">Logout</a>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="block px-4 py-3 rounded-xl text-base font-bold text-[#003366] hover:bg-slate-50">Login</a>
+                <a href="{% url 'register' %}" class="block px-4 py-3 rounded-xl text-base font-bold text-[#FF007F] hover:bg-pink-50">Get Started</a>
+            {% endif %}
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="flex-grow">
