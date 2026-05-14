@@ -18,8 +18,9 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, 'Registration successful. You can now log in.')
-            return redirect('login')
+            login(request, user)  # Auto-login the user
+            messages.success(request, f'Welcome to Campus Recovery, {user.full_name}!')
+            return redirect('home')
     else:
         form = UserRegistrationForm()
     return render(request, 'core/register.html', {'form': form})

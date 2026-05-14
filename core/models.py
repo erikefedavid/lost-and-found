@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 # pyrefly: ignore [missing-import]
 from django.utils.translation import gettext_lazy as _
+# pyrefly: ignore [missing-import]
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
