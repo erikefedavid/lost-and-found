@@ -44,22 +44,20 @@
                 </div>
             </div>
             <div class="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
-                <div class="relative mx-auto w-full rounded-3xl shadow-2xl overflow-hidden bg-slate-100 group">
-                    <div class="relative mx-auto w-full rounded-3xl shadow-2xl overflow-hidden bg-slate-100 group">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-[#003366]/20 to-[#FF007F]/10 z-10"></div>
-                        <img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 bg-slate-200" 
-                             src="{% static 'core/hero.png' %}" 
-                             alt="LCU Campus"
-                             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200';">
-                        
-                        <!-- Fallback SVG in case image is missing -->
-                        <div class="hidden w-full aspect-[4/3] bg-gradient-to-br from-[#003366] to-[#001A33] items-center justify-center relative overflow-hidden">
-                            <div class="relative z-10 text-center p-8">
-                                <div class="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20">
-                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                                </div>
-                                <h3 class="text-white font-bold text-xl">Campus L&F</h3>
+                <div class="relative mx-auto w-full aspect-[4/3] rounded-3xl shadow-2xl overflow-hidden bg-slate-100 group">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-[#003366]/20 to-[#FF007F]/10 z-10"></div>
+                    <img class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 bg-slate-200" 
+                         src="{% static 'core/hero.png' %}" 
+                         alt="LCU Campus"
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1200';">
+                    
+                    <!-- Fallback SVG in case image is missing -->
+                    <div class="hidden w-full aspect-[4/3] bg-gradient-to-br from-[#003366] to-[#001A33] items-center justify-center relative overflow-hidden">
+                        <div class="relative z-10 text-center p-8">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-center mx-auto mb-4 border border-white/20">
+                                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                             </div>
+                            <h3 class="text-white font-bold text-xl">Campus L&F</h3>
                         </div>
                     </div>
                     <div class="absolute bottom-6 left-6 z-20">
